@@ -1,0 +1,9 @@
+0.03 - Mon Nov 11 2010
+    - more precise messages
+
+0.02 - Fri Jul 9 2010
+	- --help (-h) option added
+	- print $AUTHORITY if defined
+
+0.01 - Thu Jul 8 2010
+	- first release

@@ -1,0 +1,20 @@
+NAME
+    App::Mver - just print modules' $VERSION
+
+DESCRIPTION
+    For those, who are sick of
+
+        perl -MLong::Module::Name -le'print Long::Module::Name->VERSION'
+
+SYNOPSIS
+        mver Module::Name
+
+        mver Module-Name
+
+AUTHOR
+    Алексей Суриков <ksuri@cpan.org>
+
+LICENSE
+    This program is free software, you can redistribute it under the same
+    terms as Perl itself.
+
