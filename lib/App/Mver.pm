@@ -8,6 +8,8 @@ use Pod::Find qw(pod_where);
 
 our $VERSION = '0.04';
 
+my $module_corelist = eval "use Module::CoreList; 1";
+
 sub run {
     @_ or usage();
     usage(2) if $_[0] eq '-h' or $_[0] eq '--help';
@@ -38,12 +40,24 @@ sub mver {
             if(defined $authority) {
                 print " ($authority)";
             }
+
+            if($module_corelist and is_core($arg)) {
+                print ' (core module)';
+            }
         }
         else {
             print 'installed, but $VERSION is not defined';
         }
     }
     print $/;
+}
+
+sub is_core {
+    my $arg = shift;
+
+    my($found_in_core) = Module::CoreList->find_modules(qr/^\Q$arg\E$/, $]);
+
+    !!$found_in_core;
 }
 
 sub usage {
@@ -55,6 +69,9 @@ sub usage {
         ),
     );
 }
+
+1;
+
 __END__
 
 =head1 NAME
@@ -69,9 +86,7 @@ For those, who are sick of
 
 =head1 SYNOPSIS
 
-    mver Module::Name
-
-    mver Module-Name
+    mver Module::Name1 Module-Name2 Module::NameN
 
 =head1 AUTHOR
 
