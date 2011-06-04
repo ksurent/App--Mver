@@ -9,18 +9,24 @@ use Pod::Find qw(pod_where);
 our $VERSION = '0.04';
 
 sub run {
-    my $arg = shift or usage();
-    usage(2) if $arg eq '-h' or $arg eq '--help';
+    @_ or usage();
+    usage(2) if $_[0] eq '-h' or $_[0] eq '--help';
 
+    mver($_) for @_;
+}
+
+sub mver {
+    my $arg = shift;
     $arg =~ s{-}{::}g;
 
     my $is_loaded = eval "use $arg;1";
+    print "$arg: ";
     unless(defined $is_loaded) {
         if($@ =~ /^Can't locate/) {
-            print "$arg is not installed";
+            print 'not installed';
         }
         else {
-            print "$arg is installed, but contains error";
+            print 'installed, but contains error';
         }
     }
     else {
@@ -34,7 +40,7 @@ sub run {
             }
         }
         else {
-            print "$arg is installed, but \$VERSION is not defined";
+            print 'installed, but $VERSION is not defined';
         }
     }
     print $/;
