@@ -1,5 +1,8 @@
+0.04 - Sat Jun 4 2011
+	- moved all logic from script to module
+
 0.03 - Mon Nov 11 2010
-    - more precise messages
+	- more precise messages
 
 0.02 - Fri Jul 9 2010
 	- --help (-h) option added

@@ -1,43 +1,5 @@
 #!/usr/bin/env perl
 
-use strict;
+use App::Mver;
 
-use Pod::Usage;
-use Pod::Find qw(pod_where);
-
-my $arg = shift || usage();
-usage() if $arg eq '-h' or $arg eq '--help';
-
-my $is_loaded = eval "use $arg;1";
-unless(defined $is_loaded) {
-    if($@ =~ /^Can't locate/) {
-        print "$arg is not installed";
-    }
-    else {
-        print "$arg is installed, but contains error";
-    }
-}
-else {
-    my $version = $arg->VERSION;
-    if(defined $version) {
-        print $version;
-
-        my $authority = eval "\$$arg\::AUTHORITY";
-        if(defined $authority) {
-            print " ($authority)";
-        }
-    }
-    else {
-        print "$arg is installed, but \$VERSION is not defined";
-    }
-}
-print $/;
-
-sub usage {
-    pod2usage({
-        -input => pod_where(
-            { -inc => 1 },
-            'App::Mver',
-        ),
-    });
-}
+App::Mver::run(@ARGV);

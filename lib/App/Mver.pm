@@ -1,12 +1,55 @@
 package App::Mver;
 
-our $VERSION = '0.03';
+use strict;
+use warnings;
 
-# vim: ft=perl
+use Pod::Usage;
+use Pod::Find qw(pod_where);
 
+our $VERSION = '0.04';
+
+sub run {
+    my $arg = shift or usage();
+    usage(2) if $arg eq '-h' or $arg eq '--help';
+
+    $arg =~ s{-}{::}g;
+
+    my $is_loaded = eval "use $arg;1";
+    unless(defined $is_loaded) {
+        if($@ =~ /^Can't locate/) {
+            print "$arg is not installed";
+        }
+        else {
+            print "$arg is installed, but contains error";
+        }
+    }
+    else {
+        my $version = $arg->VERSION;
+        if(defined $version) {
+            print $version;
+
+            my $authority = eval "\$$arg\::AUTHORITY";
+            if(defined $authority) {
+                print " ($authority)";
+            }
+        }
+        else {
+            print "$arg is installed, but \$VERSION is not defined";
+        }
+    }
+    print $/;
+}
+
+sub usage {
+    pod2usage(
+        -verbose => $_[0],
+        -input   => pod_where(
+            { -inc => 1 },
+            __PACKAGE__,
+        ),
+    );
+}
 __END__
-
-=encoding utf8
 
 =head1 NAME
 
@@ -26,7 +69,7 @@ For those, who are sick of
 
 =head1 AUTHOR
 
-Алексей Суриков E<lt>ksuri@cpan.orgE<gt>
+Alexey Surikov E<lt>ksuri@cpan.orgE<gt>
 
 =head1 LICENSE
 
