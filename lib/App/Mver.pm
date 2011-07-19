@@ -8,8 +8,6 @@ use Pod::Find qw(pod_where);
 
 our $VERSION = '0.04';
 
-my $module_corelist = eval "use Module::CoreList; 1";
-
 sub run {
     @_ or usage();
     usage(2) if $_[0] eq '-h' or $_[0] eq '--help';
@@ -41,8 +39,9 @@ sub mver {
                 print " ($authority)";
             }
 
-            if($module_corelist and is_core($arg)) {
-                print ' (core module)';
+            my $in_core_since = in_core_since($arg);
+            if($in_core_since) {
+                print " (core module since $in_core_since)";
             }
         }
         else {
@@ -52,12 +51,11 @@ sub mver {
     print $/;
 }
 
-sub is_core {
+sub in_core_since {
     my $arg = shift;
 
-    my($found_in_core) = Module::CoreList->find_modules(qr/^\Q$arg\E$/, $]);
-
-    !!$found_in_core;
+    return unless eval "use Module::CoreList; 1";
+    return Module::CoreList->first_release($arg);
 }
 
 sub usage {
