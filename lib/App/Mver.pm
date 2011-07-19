@@ -41,8 +41,9 @@ sub mver {
                 print " ($authority)";
             }
 
-            if($module_corelist and is_core($arg)) {
-                print ' (core module)';
+            my $in_core_since = in_core_since($arg);
+            if($module_corelist and $in_core_since) {
+                print " (core module since $in_core_since)";
             }
         }
         else {
@@ -52,12 +53,10 @@ sub mver {
     print $/;
 }
 
-sub is_core {
-    my $arg = shift;
-
-    my($found_in_core) = Module::CoreList->find_modules(qr/^\Q$arg\E$/, $]);
-
-    !!$found_in_core;
+sub in_core_since {
+     my $arg = shift;
+ 
+    return Module::CoreList->first_release($arg);
 }
 
 sub usage {
