@@ -1,3 +1,6 @@
+0.05 - Wed Oct 5 2011
+	- added shortcut to get perl version
+
 0.04 - Sat Jun 4 2011
 	- moved all logic from script to module
 	- enabled script to process more than one module at one run

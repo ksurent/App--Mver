@@ -6,7 +6,7 @@ use warnings;
 use Pod::Usage;
 use Pod::Find qw(pod_where);
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 my $module_corelist = eval "use Module::CoreList; 1";
 
@@ -21,32 +21,38 @@ sub mver {
     my $arg = shift;
     $arg =~ s{-}{::}g;
 
-    my $is_loaded = eval "use $arg;1";
     print "$arg: ";
-    unless(defined $is_loaded) {
-        if($@ =~ /^Can't locate/) {
-            print 'not installed';
-        }
-        else {
-            print 'installed, but contains error';
-        }
+    if(lc $arg eq 'perl') {
+        require Config;
+        print $Config::Config{version};
     }
     else {
-        my $version = $arg->VERSION;
-        if(defined $version) {
-            print $version;
-
-            my $authority = eval "\$$arg\::AUTHORITY";
-            if(defined $authority) {
-                print " ($authority)";
+        my $is_loaded = eval "use $arg;1";
+        unless(defined $is_loaded) {
+            if($@ =~ /^Can't locate/) {
+                print 'not installed';
             }
-
-            if($module_corelist and is_core($arg)) {
-                print ' (core module)';
+            else {
+                print 'installed, but contains error';
             }
         }
         else {
-            print 'installed, but $VERSION is not defined';
+            my $version = $arg->VERSION;
+            if(defined $version) {
+                print $version;
+
+                my $authority = eval "\$$arg\::AUTHORITY";
+                if(defined $authority) {
+                    print " ($authority)";
+                }
+
+                if($module_corelist and is_core($arg)) {
+                    print ' (core module)';
+                }
+            }
+            else {
+                print 'installed, but $VERSION is not defined';
+            }
         }
     }
     print $/;
@@ -87,6 +93,8 @@ For those, who are sick of
 =head1 SYNOPSIS
 
     mver Module::Name1 Module-Name2 Module::NameN
+
+    mver perl
 
 =head1 AUTHOR
 
