@@ -8,7 +8,10 @@ use Pod::Find qw(pod_where);
 
 our $VERSION = '0.05';
 
-my $module_corelist = eval "use Module::CoreList; 1";
+my $module_corelist = eval 'use Module::CoreList; 1';
+my $lwp_useragent   = eval 'use LWP::Simple; 1';
+my $json_any        = eval 'use JSON::Any; 1';
+my $can_do_requests = $lwp_useragent && $json_any;
 
 sub run {
     @_ or usage();
@@ -53,6 +56,14 @@ sub mver {
             else {
                 print 'installed, but $VERSION is not defined';
             }
+
+            if($can_do_requests) {
+                my $latest = get_latest_version($arg);
+
+                if(defined $latest) {
+                    print " (latest: $latest)";
+                }
+            }
         }
     }
     print $/;
@@ -64,6 +75,19 @@ sub is_core {
     my($found_in_core) = Module::CoreList->find_modules(qr/^\Q$arg\E$/, $]);
 
     !!$found_in_core;
+}
+
+sub get_latest_version {
+    my $arg = shift;
+
+    my $json = LWP::Simple::get("http://api.metacpan.org/module/$arg") or return;
+    my $response = eval { JSON::Any->from_json($json) } or return;
+
+    if($response->{status} eq 'latest') {
+        return $response->{version};
+    }
+
+    return;
 }
 
 sub usage {
