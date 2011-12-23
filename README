@@ -1,5 +1,5 @@
 NAME
-    App::Mver - just print modules' $VERSION
+    App::Mver - just print modules' $VERSION (and some other stuff)
 
 DESCRIPTION
     For those, who are sick of
@@ -8,6 +8,15 @@ DESCRIPTION
 
 SYNOPSIS
         mver Module::Name1 Module-Name2 Module::NameN
+
+        mver perl # shortcut for perl -V:version
+
+OPTIONS
+    --no-internet (-n)
+        Disable MetaCPAN API querying.
+
+    --help (-h)
+        Show this message.
 
 AUTHOR
     Alexey Surikov <ksuri@cpan.org>
