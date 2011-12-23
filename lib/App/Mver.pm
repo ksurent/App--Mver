@@ -135,6 +135,20 @@ For those, who are sick of
 
     mver perl # shortcut for perl -V:version
 
+=head1 OPTIONS
+
+=over 4
+
+=item --no-internet (-n)
+
+Disable MetaCPAN API querying.
+
+=item --help (-h)
+
+Show this message.
+
+=back
+
 =head1 AUTHOR
 
 Alexey Surikov E<lt>ksuri@cpan.orgE<gt>
