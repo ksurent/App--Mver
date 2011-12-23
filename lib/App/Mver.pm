@@ -30,7 +30,7 @@ sub mver {
         print $Config::Config{version};
     }
     else {
-        my $is_loaded = eval "use $arg;1";
+        my $is_loaded = eval "use $arg; 1";
         unless(defined $is_loaded) {
             if($@ =~ /^Can't locate/) {
                 print 'not installed';
@@ -59,9 +59,13 @@ sub mver {
 
             if($can_do_requests) {
                 my $latest = get_latest_version($arg);
-
                 if(defined $latest) {
-                    print " (latest: $latest)";
+                    if($latest eq $version) {
+                        print ' (latest)';
+                    }
+                    else {
+                        print " (latest: $latest)";
+                    }
                 }
             }
         }
