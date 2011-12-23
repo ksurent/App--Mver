@@ -6,7 +6,7 @@ readme_from 'lib/App/Mver.pm';
 requires 'Pod::Parser';
 recommends 'Module::CoreList';
 recommends 'JSON::Any';
-recommends 'LWP::Simple'
+recommends 'LWP::Simple';
 install_script 'mver';
 
 WriteAll;
