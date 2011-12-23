@@ -5,6 +5,7 @@ use warnings;
 
 use Pod::Usage;
 use Pod::Find qw(pod_where);
+use Getopt::Long qw(GetOptionsFromArray);
 
 our $VERSION = '0.05';
 
@@ -14,10 +15,20 @@ my $json_any        = eval 'use JSON::Any; 1';
 my $can_do_requests = $lwp_useragent && $json_any;
 
 sub run {
-    @_ or usage();
-    usage(2) if $_[0] eq '-h' or $_[0] eq '--help';
+    GetOptionsFromArray(
+        \@_,
+        \my %opts,
+        'help|h',
+        'no-internet|n',
+    );
+    my @modules = grep { not /^-/ } @_;
 
-    mver($_) for @_;
+    @modules or usage();
+    usage(2) if $opts{help};
+
+    $can_do_requests = 0 if $opts{'no-internet'};
+
+    mver($_) for @modules;
 }
 
 sub mver {
