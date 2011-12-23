@@ -1,3 +1,6 @@
+0.06 - Fri Dec 23 2011
+	- added MetaCPAN API querying to get latest version available
+
 0.05 - Wed Oct 5 2011
 	- added shortcut to get perl version
 
