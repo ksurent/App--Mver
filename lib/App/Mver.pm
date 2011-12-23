@@ -110,7 +110,7 @@ __END__
 
 =head1 NAME
 
-App::Mver - just print modules' $VERSION (and some other stuff)
+App::Mver - just print modules' C<$VERSION> (and some other stuff)
 
 =head1 DESCRIPTION
 
