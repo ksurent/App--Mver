@@ -84,7 +84,7 @@ sub is_core {
 sub get_latest_version {
     my $arg = shift;
 
-    my $json = LWP::Simple::get("http://api.metacpan.org/module/$arg") or return;
+    my $json     = LWP::Simple::get("http://api.metacpan.org/module/$arg") or return;
     my $response = eval { JSON::Any->from_json($json) } or return;
 
     if($response->{status} eq 'latest') {
@@ -110,7 +110,7 @@ __END__
 
 =head1 NAME
 
-App::Mver - just print modules' $VERSION
+App::Mver - just print modules' $VERSION (and some other stuff)
 
 =head1 DESCRIPTION
 
