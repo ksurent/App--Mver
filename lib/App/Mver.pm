@@ -7,7 +7,7 @@ use Pod::Usage;
 use Pod::Find qw(pod_where);
 use Getopt::Long qw(GetOptionsFromArray);
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 my $module_corelist = eval 'use Module::CoreList; 1';
 my $lwp_useragent   = eval 'use LWP::Simple; 1';
