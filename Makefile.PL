@@ -1,6 +1,8 @@
 use inc::Module::Install;
 
 all_from 'lib/App/Mver.pm';
+readme_from 'lib/App/Mver.pm';
+
 requires 'Pod::Parser';
 recommends 'Module::CoreList';
 recommends 'JSON::Any';
