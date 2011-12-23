@@ -122,7 +122,7 @@ For those, who are sick of
 
     mver Module::Name1 Module-Name2 Module::NameN
 
-    mver perl
+    mver perl # shortcut for perl -V:version
 
 =head1 AUTHOR
 
