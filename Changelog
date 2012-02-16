@@ -1,3 +1,7 @@
+0.07 - Thu Feb 16 2012
+	- changed C<use> to C<require> for optional modules to avoid possible warnings
+	on subroutines name collision
+
 0.06 - Fri Dec 23 2011
 	- added MetaCPAN API querying to get latest version available
 
