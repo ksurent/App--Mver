@@ -7,7 +7,7 @@ our $VERSION = '0.07';
 
 my $module_corelist = eval 'require Module::CoreList; 1';
 my $lwp_useragent   = eval 'require LWP::Simple; 1';
-my $json_any        = eval 'require JSON::Any; 1';
+my $json_any        = eval 'use JSON::Any; 1';
 my $can_do_requests = $lwp_useragent && $json_any;
 
 sub run {
