@@ -3,9 +3,6 @@ package App::Mver;
 use strict;
 use warnings;
 
-use Pod::Usage;
-use Getopt::Long qw(GetOptionsFromArray);
-
 our $VERSION = '0.07';
 
 my $module_corelist = eval 'require Module::CoreList; 1';
