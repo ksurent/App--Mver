@@ -1,6 +1,7 @@
 package App::Mver;
 
 use strict;
+use version;
 use warnings;
 
 use ExtUtils::MakeMaker;
@@ -32,8 +33,9 @@ sub mver {
     else {
         my $file = MM->_installed_file_for_module($arg);
         if(defined $file) {
-            my $version = MM->parse_version($file);
-            if($version ne 'undef') {
+            my $version = version->parse(MM->parse_version($file));
+            if($version) {
+                $version = version->parse($version);
                 print $version;
 
                 if($module_corelist and is_core($arg)) {
@@ -46,13 +48,11 @@ sub mver {
 
             if($can_do_requests) {
                 my $latest = get_latest_version($arg);
-                if(defined $latest) {
-                    if($latest eq $version) {
-                        print ' (latest)';
-                    }
-                    else {
-                        print " (latest: $latest)";
-                    }
+                if($latest and $latest <= $version) {
+                    print ' (latest)';
+                }
+                else {
+                    print " (latest: $latest)";
                 }
             }
         }
@@ -78,7 +78,7 @@ sub get_latest_version {
     my $response = eval { JSON::Any->from_json($json) } or return;
 
     if($response->{status} eq 'latest') {
-        return $response->{version};
+        return version->parse($response->{version});
     }
 
     return;
