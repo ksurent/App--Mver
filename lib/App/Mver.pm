@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use Pod::Usage;
-use Pod::Find qw(pod_where);
 use Getopt::Long qw(GetOptionsFromArray);
 
 our $VERSION = '0.07';
