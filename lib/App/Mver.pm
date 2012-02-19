@@ -15,20 +15,11 @@ my $json_any        = eval 'require JSON::Any; 1';
 my $can_do_requests = $lwp_useragent && $json_any;
 
 sub run {
-    GetOptionsFromArray(
-        \@_,
-        \my %opts,
-        'help|h',
-        'no-internet|n',
-    );
-    my @modules = grep { not /^-/ } @_;
+    my($modules, $opts) = @_;
 
-    @modules or usage();
-    usage(2) if $opts{help};
+    $can_do_requests = 0 if $opts->{'no-internet'};
 
-    $can_do_requests = 0 if $opts{'no-internet'};
-
-    mver($_) for @modules;
+    mver($_) for @$modules;
 }
 
 sub mver {
@@ -105,16 +96,6 @@ sub get_latest_version {
     return;
 }
 
-sub usage {
-    pod2usage(
-        -verbose => $_[0],
-        -input   => pod_where(
-            { -inc => 1 },
-            __PACKAGE__,
-        ),
-    );
-}
-
 1;
 
 __END__
@@ -129,25 +110,23 @@ For those, who are sick of
 
     perl -MLong::Module::Name -le'print Long::Module::Name->VERSION'
 
-=head1 SYNOPSIS
+The main purpose of this simple stupid tool is to save you some typing.
 
-    mver Module::Name1 Module-Name2 Module::NameN
-
-    mver perl # shortcut for perl -V:version
-
-=head1 OPTIONS
+It will report you the following things (some of them require command line arguments):
 
 =over 4
 
-=item --no-internet (-n)
+=item your installed version of the given module(s)
 
-Disable MetaCPAN API querying.
+=item whether or not your current version is the last one available on CPAN
 
-=item --help (-h)
-
-Show this message.
+=item whether or not the module is included in Perl distribution
 
 =back
+
+=head1 SEE ALSO
+
+L<mver>
 
 =head1 AUTHOR
 
