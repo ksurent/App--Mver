@@ -36,11 +36,6 @@ sub mver {
             if($version ne 'undef') {
                 print $version;
 
-                my $authority = eval "\$$arg\::AUTHORITY";
-                if(defined $authority) {
-                    print " ($authority)";
-                }
-
                 if($module_corelist and is_core($arg)) {
                     print ' (core module)';
                 }
