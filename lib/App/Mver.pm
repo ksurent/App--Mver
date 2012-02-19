@@ -3,6 +3,8 @@ package App::Mver;
 use strict;
 use warnings;
 
+use ExtUtils::MakeMaker;
+
 our $VERSION = '0.07';
 
 my $module_corelist = eval 'require Module::CoreList; 1';
@@ -28,18 +30,10 @@ sub mver {
         print $Config::Config{version};
     }
     else {
-        my $is_loaded = eval "use $arg; 1";
-        unless(defined $is_loaded) {
-            if($@ =~ /^Can't locate/) {
-                print 'not installed';
-            }
-            else {
-                print 'installed, but contains error';
-            }
-        }
-        else {
-            my $version = $arg->VERSION;
-            if(defined $version) {
+        my $file = MM->_installed_file_for_module($arg);
+        if(defined $file) {
+            my $version = MM->parse_version($file);
+            if($version ne 'undef') {
                 print $version;
 
                 my $authority = eval "\$$arg\::AUTHORITY";
@@ -66,6 +60,9 @@ sub mver {
                     }
                 }
             }
+        }
+        else {
+            print 'not installed';
         }
     }
     print $/;
