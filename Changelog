@@ -1,6 +1,7 @@
-0.07 - Thu Feb 16 2012
-	- changed C<use> to C<require> for optional modules to avoid possible warnings
-	on subroutines name collision
+0.07 - Mon Feb 27 2012
+	- utilize ExtUtils::MM to do the actual work (instead of eval "use Module")
+	- use version module for proper versions comparisons
+	- removed $AUTHORITY handling as it seems to be useless
 
 0.06 - Fri Dec 23 2011
 	- added MetaCPAN API querying to get latest version available
