@@ -6,17 +6,17 @@ DESCRIPTION
 
         perl -MLong::Module::Name -le'print Long::Module::Name->VERSION'
 
-SYNOPSIS
-        mver Module::Name1 Module-Name2 Module::NameN
+    The main purpose of this simple stupid tool is to save you some typing.
 
-        mver perl # shortcut for perl -V:version
+    It will report you the following things (some of them require command
+    line arguments):
 
-OPTIONS
-    --no-internet (-n)
-        Disable MetaCPAN API querying.
+    your installed version of the given module(s)
+    whether or not your current version is the last one available on CPAN
+    whether or not the module is included in Perl distribution
 
-    --help (-h)
-        Show this message.
+SEE ALSO
+    mver
 
 AUTHOR
     Alexey Surikov <ksuri@cpan.org>
