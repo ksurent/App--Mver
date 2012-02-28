@@ -35,7 +35,6 @@ sub mver {
         if(defined $file) {
             my $version = version->parse(MM->parse_version($file));
             if($version) {
-                $version = version->parse($version);
                 print $version;
 
                 if($module_corelist and is_core($arg)) {
