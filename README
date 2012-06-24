@@ -14,6 +14,7 @@ DESCRIPTION
     your installed version of the given module(s)
     whether or not your current version is the last one available on CPAN
     whether or not the module is included in Perl distribution
+    changes between installed and latest version
 
 SEE ALSO
     mver

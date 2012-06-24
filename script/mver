@@ -8,6 +8,7 @@ GetOptions(
     \my %opts,
     'help|h',
     'no-internet|n',
+    'changes|c',
 );
 my @modules = grep { not /^-/ } @ARGV;
 
@@ -37,6 +38,10 @@ mver - little handy tool to quickly get versions of installed modules
 =item --no-internet (-n)
 
 Disable MetaCPAN API querying.
+
+=item --changes (-c)
+
+Try to get a list of changes that happened between your and latest versions.
 
 =item --help (-h)
 

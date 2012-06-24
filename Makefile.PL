@@ -10,6 +10,7 @@ requires 'ExtUtils::MakeMaker';
 recommends 'Module::CoreList';
 recommends 'JSON::Any';
 recommends 'LWP::Simple';
+recommends 'CPAN::Changes';
 install_script 'mver';
 
 WriteAll;

@@ -6,17 +6,20 @@ use warnings;
 
 use ExtUtils::MakeMaker;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
-my $module_corelist = eval 'require Module::CoreList; 1';
-my $lwp_useragent   = eval 'require LWP::Simple; 1';
-my $json_any        = eval 'use JSON::Any; 1';
-my $can_do_requests = $lwp_useragent && $json_any;
+my $module_corelist   = eval 'require Module::CoreList; 1';
+my $lwp_useragent     = eval 'require LWP::Simple; 1';
+my $json_any          = eval 'use JSON::Any; 1';
+my $changes_parser    = eval 'require CPAN::Changes; 1';
+my $can_do_requests   = $lwp_useragent && $json_any;
+my $can_parse_changes = $can_do_requests && $changes_parser;
 
 sub run {
     my($modules, $opts) = @_;
 
     $can_do_requests = 0 if $opts->{'no-internet'};
+    $can_parse_changes = 0 unless $opts->{changes};
 
     mver($_) for @$modules;
 }
@@ -33,7 +36,7 @@ sub mver {
     else {
         my $file = MM->_installed_file_for_module($arg);
         if(defined $file) {
-            my $version = version->parse(MM->parse_version($file));
+            my $version = eval { version->parse(MM->parse_version($file)) };
             if($version) {
                 print $version;
 
@@ -45,13 +48,20 @@ sub mver {
                 print 'installed, but $VERSION is not defined';
             }
 
-            if($can_do_requests) {
-                my $latest = get_latest_version($arg);
+            if($can_do_requests and $version) {
+                my($latest, $author) = get_latest_version_and_author($arg);
                 if($latest and $latest <= $version) {
                     print ' (latest)';
                 }
                 else {
                     print " (latest: $latest)";
+
+                    if($can_parse_changes and $latest and $author) {
+                        my $changes = get_changes_between($arg, $author, $version, $latest);
+                        if($changes) {
+                            print "$/Changes:$/$changes";
+                        }
+                    }
                 }
             }
         }
@@ -70,17 +80,42 @@ sub is_core {
     !!$found_in_core;
 }
 
-sub get_latest_version {
+sub get_latest_version_and_author {
     my $arg = shift;
 
     my $json     = LWP::Simple::get("http://api.metacpan.org/module/$arg") or return;
     my $response = eval { JSON::Any->from_json($json) } or return;
 
     if($response->{status} eq 'latest') {
-        return version->parse($response->{version});
+        my $version = version->parse($response->{version}) or return ();
+        return ($version, $response->{author});
     }
 
-    return;
+    return ();
+}
+
+sub get_changes_between {
+    my($arg, $author, $ver_start, $ver_stop) = @_;
+
+    $arg =~ s/::/-/g;
+
+    my $raw;
+    for my $c (qw(Changes Changelog CHANGELOG CHANGES ChangeLog)) {
+        $raw = LWP::Simple::get("http://api.metacpan.org/source/$author/$arg-$ver_stop/$c") and last;
+    }
+
+    my $changes;
+    if($raw) {
+        my $parser = CPAN::Changes->load_string($raw);
+        for my $release ($parser->releases) {
+            my $curr = eval { version->parse($release->version) } or next;
+            if($curr > $ver_start and $curr <= $ver_stop) {
+                $changes .= $release->serialize;
+            }
+        }
+    }
+
+    $changes;
 }
 
 1;
@@ -108,6 +143,8 @@ It will report you the following things (some of them require command line argum
 =item whether or not your current version is the last one available on CPAN
 
 =item whether or not the module is included in Perl distribution
+
+=item changes between installed and latest version
 
 =back
 
