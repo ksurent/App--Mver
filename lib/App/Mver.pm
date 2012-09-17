@@ -17,7 +17,7 @@ my $can_parse_changes = $can_do_requests && $changes_parser;
 
 my $api_host         = 'http://api.metacpan.org';
 my $module_search    = "$api_host/module/%s";
-my $changelog_search = "$api_host/v0/file/_search?q=release:%s-%s AND (name:Changes OR name:ChangeLog OR name:CHANGES OR name:CHANGELOG OR name:Changelog)&fields=path,author";
+my $changelog_search = "$api_host/v0/file/_search?q=release:%s-%s AND (name:Changes OR name:ChangeLog OR name:CHANGES OR name:CHANGELOG OR name:Changelog)&fields=path";
 my $source_search    = "$api_host/source/%s/%s/%s";
 
 sub run {
@@ -109,7 +109,7 @@ sub get_changes_between {
     my $first_hit = $response->{hits}{hits}[0]{fields} or return;
 
     my $raw = LWP::Simple::get(
-        sprintf $source_search, $first_hit->{author},
+        sprintf $source_search, $author,
                                 "$arg-$ver_stop",
                                 $first_hit->{path},
     ) or return;
