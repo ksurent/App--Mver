@@ -1,3 +1,6 @@
+0.09 - Mon Sep 17 2012
+	- use 2 API requests at max to get Changelog
+
 0.08 - Thu Jun 21 2012
 	- utilize CPAN::Changes to parse Changelog to show changes between 
 	installed and latest version
