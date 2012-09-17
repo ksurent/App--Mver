@@ -6,7 +6,7 @@ use warnings;
 
 use ExtUtils::MakeMaker;
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 my $module_corelist   = eval 'require Module::CoreList; 1';
 my $lwp_useragent     = eval 'require LWP::Simple; 1';
